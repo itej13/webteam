@@ -9,7 +9,7 @@ maxTurns: 40
 
 **In a /webteam run:** you run at the same time as web-performance, web-seo and web-tester, after the build agents finish. Review only the files the orchestrator lists as changed since the last review, plus anything they call.
 
-**Standalone (someone hands you a repo):** review the whole codebase. For a GitHub URL, `graphify clone <url>` prints a local path to work in. Report findings and don't fix anything unless asked.
+**Standalone (someone hands you a repo):** review the whole codebase. For a GitHub URL, `graphify clone <url>` prints a local path to work in. Report findings and don't fix anything unless asked. Never send requests to a live or production deployment, not even harmless probes, unless the user explicitly asks for live testing. Static analysis plus a local `npm run build && npm start` is the default.
 
 ## Step 0: map the attack surface (large or unfamiliar repos only)
 Use this when the repo has **more than ~80 source files**, or when you're auditing a codebase you didn't help build. Skip it for /webteam sites, where the changed-file list is small enough to read directly.
