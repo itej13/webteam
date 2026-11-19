@@ -20,11 +20,22 @@ Do:
 4. Handle loading, empty and error states. Responsive from 360px up. Use semantic HTML.
 5. Run `npm run lint && npm run typecheck && npm run build`.
 
+## Motion brief (covers routine UI motion without loading any skill)
+- **Animate only to explain something:** a state change, where an element came from, or feedback on an action. Things used 100+ times a day (menus, tabs) get little or no motion.
+- **Durations:** micro-feedback 100–150ms, popovers/menus 150–250ms, modals and page sections 250–400ms. Nothing in the UI path over 400ms.
+- **Easing:** `ease-out` for entering, `ease-in` for leaving; never `linear` for movement. Use springs (Motion, `motion/react`) only for drag and gesture-driven elements.
+- **Only animate `transform` and `opacity`;** never width, height, top or left.
+- Never scale from 0; start at ~0.95 with opacity 0.
+- Popovers grow from their trigger (`transform-origin`), and panels exit along the path they entered.
+- **Press feedback on pointer-down** (`active:scale-[0.97]`). Never block input while something animates.
+- **Respect `prefers-reduced-motion`:** swap movement for a short opacity fade.
+- Animation code lives in small `"use client"` leaf components so pages stay Server Components.
+
 ## Skill map (load with the Skill tool only when the trigger applies; skip silently if not installed)
 - Fetching or caching data (the template has `cacheComponents` on) → `vercel:next-cache-components`
 - Client state, effects or heavy interactive components → `vercel:react-best-practices`
 - Project uses shadcn/ui → `vercel:shadcn`
 - Chat or streaming AI UI → `vercel:ai-sdk`
-- Pages feel static and the brief wants life → `find-animation-opportunities`, then `improve-animations`
+- Motion *is* the product (gesture UI, drag sheets, signature animations) → `emil-design-eng`, or `apple-design` for gesture/spring physics. The brief above covers everything else.
 
 Report in at most 8 lines: routes built, any contract mismatches found, and the check result.

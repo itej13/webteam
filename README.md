@@ -53,8 +53,8 @@ brief ──▶ 1 Plan ──▶ [you approve] ──▶ 2 Design ∥ Backend �
 | Agent | Owns | Model · effort · max turns | Preloaded skill | Loads on demand (only when the trigger applies) |
 |---|---|---|---|---|
 | `web-planner` | `docs/PLAN.md` | inherit · high · 15 | none | `engineering:system-design`, `engineering:architecture`, `vercel:ai-sdk` |
-| `web-designer` | `app/globals.css`, `components/ui/**` | inherit · medium · 40 | `frontend-design:frontend-design` | `ui-ux-pro-max`, `landing-page`, `pick-ui-library`, `vercel:shadcn`, `emil-design-eng`, `apple-design`, `impeccable` |
-| `web-frontend` | pages, layouts, feature components | sonnet · medium · 80 | `vercel:nextjs` | `vercel:next-cache-components`, `vercel:react-best-practices`, `vercel:shadcn`, `vercel:ai-sdk`, `find-animation-opportunities`, `improve-animations` |
+| `web-designer` | `app/globals.css`, `components/ui/**` | inherit · medium · 40 | none: built-in **design brief** | `ui-ux-pro-max`, `landing-page`, `pick-ui-library`, `vercel:shadcn`, `impeccable`, `frontend-design:frontend-design`, `design-taste-frontend` (high-end only) |
+| `web-frontend` | pages, layouts, feature components | sonnet · medium · 80 | `vercel:nextjs` + built-in **motion brief** | `vercel:next-cache-components`, `vercel:react-best-practices`, `vercel:shadcn`, `vercel:ai-sdk`, `emil-design-eng`, `apple-design` |
 | `web-backend` | `app/api/**`, `lib/server/**`, `db/**`, `proxy.ts`, server actions | inherit · high · 80 | none | `vercel:marketplace`, `vercel:vercel-storage`, `vercel:auth`, `vercel:vercel-functions`, `vercel:ai-sdk`, `vercel:ai-gateway`, `vercel:workflow`, `vercel:queues`, `data:sql-queries` |
 | `web-security` | review only (≤ 10-line fixes) | inherit · medium · 30 | none | `security-review`, `vercel:vercel-firewall` |
 | `web-performance` | review only (≤ 10-line fixes) | sonnet · low · 25 | none | `vercel:next-cache-components`, `vercel:cdn-caching`, `vercel:react-best-practices` |
@@ -81,6 +81,7 @@ Every skill is **optional**: agents skip any that aren't installed. Where they c
 | **Model per agent** | Mechanical work (SEO, deploy) runs on Haiku; routine build and review work runs on Sonnet; only planning, design, backend and security use your main model. |
 | **`effort` + `maxTurns` per agent** | Caps reasoning depth and stops runaway loops. |
 | **One preloaded skill at most** | Preloaded skills are injected in full at startup. Everything else is a *skill map* in the agent's prompt: load X only when trigger Y applies. Large skills (e.g. a 17k-token design skill) are explicitly gated. |
+| **Distilled briefs, not merged skills** | The designer and frontend agents carry a ~700-word design brief and a ~200-word motion brief, distilled from eight overlapping design and motion skills (~28k words). Routine sites need no skill loads at all; the originals stay available for depth. Merging the skills into one always-loaded file would have cost ~38k tokens per run and dropped their scripts and data. |
 | **Explicit `tools:` lists** | Agents don't inherit your MCP connectors or the Agent tool, so their context carries no tool schemas they don't need and they can't fan out. |
 | **Files as the shared memory** | The plan, contract and status live in `docs/`. Prompts say "read docs/PLAN.md" instead of pasting it. |
 | **Diff-scoped reviews** | Review agents get only the files changed since the last review. |
