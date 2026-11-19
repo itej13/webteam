@@ -1,0 +1,11 @@
+{
+  "name": "webteam",
+  "owner": { "name": "itej13", "url": "https://github.com/itej13" },
+  "plugins": [
+    {
+      "name": "webteam",
+      "source": "./",
+      "description": "Supervised multi-agent website builder: 9 layer agents + the /webteam orchestrator skill."
+    }
+  ]
+}

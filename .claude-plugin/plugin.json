@@ -1,0 +1,10 @@
+{
+  "name": "webteam",
+  "version": "1.0.0",
+  "description": "A supervised team of 9 Claude Code subagents that builds a website across all 11 layers (plan, design, frontend, backend, database, deploy, security, performance, SEO, testing, monitoring) in dependency-ordered parallel waves.",
+  "author": { "name": "itej13", "url": "https://github.com/itej13" },
+  "homepage": "https://github.com/itej13/webteam",
+  "repository": "https://github.com/itej13/webteam",
+  "license": "MIT",
+  "keywords": ["subagents", "orchestration", "web-development", "nextjs", "vercel", "multi-agent"]
+}
