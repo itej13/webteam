@@ -54,12 +54,12 @@ brief ──▶ 1 Plan ──▶ [you approve] ──▶ 2 Design ∥ Backend �
 |---|---|---|---|---|
 | `web-planner` | `docs/PLAN.md` | inherit · high · 15 | none | `engineering:system-design`, `engineering:architecture`, `vercel:ai-sdk` |
 | `web-designer` | `app/globals.css`, `components/ui/**` | inherit · medium · 40 | none: built-in **design brief** | `ui-ux-pro-max`, `landing-page`, `pick-ui-library`, `vercel:shadcn`, `impeccable`, `frontend-design:frontend-design`, `design-taste-frontend` (high-end only) |
-| `web-frontend` | pages, layouts, feature components | sonnet · medium · 80 | `vercel:nextjs` + built-in **motion brief** | `vercel:next-cache-components`, `vercel:react-best-practices`, `vercel:shadcn`, `vercel:ai-sdk`, `emil-design-eng`, `apple-design` |
-| `web-backend` | `app/api/**`, `lib/server/**`, `db/**`, `proxy.ts`, server actions | inherit · high · 80 | none | `vercel:marketplace`, `vercel:vercel-storage`, `vercel:auth`, `vercel:vercel-functions`, `vercel:ai-sdk`, `vercel:ai-gateway`, `vercel:workflow`, `vercel:queues`, `data:sql-queries` |
+| `web-frontend` | pages, layouts, feature components, `lib/content/**`; may only append to `site.routes` | sonnet · medium · 80 | `vercel:nextjs` + built-in **motion brief** | `vercel:next-cache-components`, `vercel:react-best-practices`, `vercel:shadcn`, `vercel:ai-sdk`, `emil-design-eng`, `apple-design` |
+| `web-backend` | `app/api/**`, `lib/server/**`, `db/**`, `proxy.ts`, `next.config.ts`, server actions, and their unit tests | inherit · high · 80 | none | `vercel:marketplace`, `vercel:vercel-storage`, `vercel:auth`, `vercel:vercel-functions`, `vercel:ai-sdk`, `vercel:ai-gateway`, `vercel:workflow`, `vercel:queues`, `data:sql-queries` |
 | `web-security` | review only (≤ 10-line fixes) | inherit · medium · 30 | none | `security-review`, `vercel:vercel-firewall` |
 | `web-performance` | review only (≤ 10-line fixes) | sonnet · low · 25 | none | `vercel:next-cache-components`, `vercel:cdn-caching`, `vercel:react-best-practices` |
 | `web-seo` | `lib/site.ts`, sitemap, robots, OG images | haiku · low · 25 | none | `design:accessibility-review` |
-| `web-tester` | `**/*.test.ts`, `e2e/**` | sonnet · medium · 50 | none | `anthropic-skills:webapp-testing`, `engineering:testing-strategy` |
+| `web-tester` | `e2e/**`, plus unit tests where an owner left none | sonnet · medium · 50 | none | `anthropic-skills:webapp-testing`, `engineering:testing-strategy` |
 | `web-ship` | `.github/**`, `instrumentation.ts`, `vercel.ts`, `.env.example` | haiku · low · 30 | none | `vercel:deploy`, `vercel:vercel-cli`, `vercel:env-vars`, `vercel:deployments-cicd`, `vercel:verification`, `engineering:deploy-checklist` |
 
 Every skill is **optional**: agents skip any that aren't installed. Where they come from:
@@ -128,6 +128,18 @@ The supervisor will:
 - Claude Code with subagent support.
 - The [web-starter](https://github.com/itej13/web-starter) layout. Agents assume Next.js App Router, `npm run check`, `docs/PLAN.md` and the ownership table in `CLAUDE.md`. Other stacks need the ownership table and commands edited.
 - Node 22+; a Vercel account for preview deploys (optional).
+
+## First trial run
+
+A 3-page bakery site with a contact API (validation, honeypot, logging), local only:
+
+- **Five waves, about 6 minutes of agent time.** The result: 19 unit tests, 5 Playwright tests, 0 high-severity security findings, and two low-severity ones fixed in the fix wave.
+- **The gates caught what reports alone would have missed.** One agent edited a field it didn't own, and the gate reverted it. A security fix (a required `Content-Type` header) could have broken the form; the e2e journeys proved it didn't.
+- **Cost:** about 290k subagent tokens, roughly 35–47k per agent, mostly fixed startup context. That's why the size gate exists: below about 4 pages with light backend logic, a single session is cheaper.
+- **The run exposed three gaps, now fixed:**
+  - content files and `next.config.ts` had no owner;
+  - test ownership was ambiguous (a file's owner now owns its unit tests);
+  - the `site.routes` append rule was too loose.
 
 ## Limits
 

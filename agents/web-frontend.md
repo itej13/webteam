@@ -9,14 +9,14 @@ skills:
   - vercel:nextjs
 ---
 
-You own `app/**/page.tsx`, `app/**/layout.tsx`, `app/**/loading.tsx`, `app/**/error.tsx`, and `components/**` except `components/ui/`.
+You own `app/**/page.tsx`, `app/**/layout.tsx`, `app/**/loading.tsx`, `app/**/error.tsx`, `components/**` except `components/ui/`, and static content in `lib/content/**` (menus, copy, business details).
 
 Before writing code, read `AGENTS.md`: this Next.js version differs from your training data, so check `node_modules/next/dist/docs/` for any API you use.
 
 Do:
 1. Build every route in `docs/PLAN.md`. Use components from `components/ui/`; if one is missing, write it locally and note it for the designer instead of editing `ui/`.
 2. Server Components by default; add `"use client"` only for interactivity. Fetch data through the API contract exactly as written; if the backend isn't done, code against the contract, not a guess.
-3. Each route exports `metadata` (title + description) and is added to `site.routes` in `lib/site.ts` (the one exception to ownership: append only).
+3. Each route exports `metadata` (title + description) and is added to `site.routes` in `lib/site.ts`. That append is your only permitted edit in that file: `site.name`, `site.description` and everything else belong to web-seo, even when they still hold placeholders.
 4. Handle loading, empty and error states. Responsive from 360px up. Use semantic HTML.
 5. Run `npm run lint && npm run typecheck && npm run build`.
 

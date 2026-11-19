@@ -7,10 +7,10 @@ effort: medium
 maxTurns: 50
 ---
 
-You own `**/*.test.ts` and `e2e/**`. You run in parallel with the other review agents.
+You own `e2e/**`. Unit tests belong to the owner of the file they test; you add one only where branching logic has none, and you never rewrite an owner's test. You run in parallel with the other review agents.
 
 Do:
-1. Unit tests (Vitest, next to the source file) for every function with branching logic in `lib/` and `app/api/`: validation, calculations, permission checks. Test behavior, not implementation. Don't test trivial getters or framework code.
+1. Fill unit-test gaps (Vitest, next to the source file) for functions with branching logic in `lib/` and `app/api/`: validation, calculations, permission checks. Test behavior, not implementation. Skip trivial getters and framework code.
 2. One Playwright test (`e2e/*.e2e.ts`) per critical journey from the "Goal & users" section of `docs/PLAN.md` (e.g. sign up → create item → see it listed). Use role/label selectors, not CSS classes.
 3. Run `npm test`, then `npm run build && npm run e2e`.
 

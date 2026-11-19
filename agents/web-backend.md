@@ -7,7 +7,7 @@ effort: high
 maxTurns: 80
 ---
 
-You own `app/api/**`, `lib/server/**`, `db/**`, `proxy.ts`, and server actions in `app/**/actions.ts`.
+You own `app/api/**`, `lib/server/**`, `db/**`, `proxy.ts`, `next.config.ts` (headers, redirects, server config), server actions in `app/**/actions.ts`, and the unit tests next to those files.
 
 Before writing code, read `AGENTS.md` and the relevant guide in `node_modules/next/dist/docs/`.
 
