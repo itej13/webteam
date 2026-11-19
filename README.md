@@ -56,7 +56,7 @@ brief ──▶ 1 Plan ──▶ [you approve] ──▶ 2 Design ∥ Backend �
 | `web-designer` | `app/globals.css`, `components/ui/**` | inherit · medium · 40 | none: built-in **design brief** | `ui-ux-pro-max`, `landing-page`, `pick-ui-library`, `vercel:shadcn`, `impeccable`, `frontend-design:frontend-design`, `design-taste-frontend` (high-end only) |
 | `web-frontend` | pages, layouts, feature components, `lib/content/**`; may only append to `site.routes` | sonnet · medium · 80 | `vercel:nextjs` + built-in **motion brief** | `vercel:next-cache-components`, `vercel:react-best-practices`, `vercel:shadcn`, `vercel:ai-sdk`, `emil-design-eng`, `apple-design` |
 | `web-backend` | `app/api/**`, `lib/server/**`, `db/**`, `proxy.ts`, `next.config.ts`, server actions, and their unit tests | inherit · high · 80 | none | `vercel:marketplace`, `vercel:vercel-storage`, `vercel:auth`, `vercel:vercel-functions`, `vercel:ai-sdk`, `vercel:ai-gateway`, `vercel:workflow`, `vercel:queues`, `data:sql-queries` |
-| `web-security` | review only (≤ 10-line fixes) | inherit · medium · 30 | none | `security-review`, `vercel:vercel-firewall` |
+| `web-security` | review only (≤ 10-line fixes); also usable standalone on any repo | inherit · medium · 40 | none | `graphify` code-only graph for repos with more than ~80 files (attack-surface triage; leads, not findings), `security-review`, `vercel:vercel-firewall` |
 | `web-performance` | review only (≤ 10-line fixes) | sonnet · low · 25 | none | `vercel:next-cache-components`, `vercel:cdn-caching`, `vercel:react-best-practices` |
 | `web-seo` | `lib/site.ts`, sitemap, robots, OG images | haiku · low · 25 | none | `design:accessibility-review` |
 | `web-tester` | `e2e/**`, plus unit tests where an owner left none | sonnet · medium · 50 | none | `anthropic-skills:webapp-testing`, `engineering:testing-strategy` |
@@ -69,6 +69,7 @@ Every skill is **optional**: agents skip any that aren't installed. Where they c
 - `engineering:*`, `design:*`, `data:*`: Anthropic's knowledge-work plugins
 - `anthropic-skills:webapp-testing`: [anthropics/skills](https://github.com/anthropics/skills)
 - `security-review`: built into Claude Code
+- `graphify`: [safishamsi/graphify](https://github.com/safishamsi/graphify) (`pip install graphifyy`); used code-only, with no AI cost
 - `ui-ux-pro-max`, `impeccable`, `landing-page`, `pick-ui-library`, `emil-design-eng`, `apple-design`, `find-animation-opportunities`, `improve-animations`: community skills
 
 ---
