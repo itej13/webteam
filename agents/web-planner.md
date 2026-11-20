@@ -40,6 +40,7 @@ Sections:
 - **Existing code → detect it, never switch it.** Read `package.json`, `pyproject.toml`/`requirements.txt`, `Gemfile`, `go.mod`, `composer.json`, `Cargo.toml` and the framework config; take commands from its scripts/Makefile.
 - **Empty folder →** the stack the brief names. If it names none: Next.js from web-starter (best-supported: CI, analytics, sitemap and tests come prewired). Choose another only when the brief points to it (content-only static site → Astro; the team knows Django/Rails/Laravel), and give the reason as an `ASSUMPTION:`.
 - **`check` is one command that fails on lint, type, unit-test and build errors.** If the stack has no such script, write the chain (e.g. `ruff check . && mypy . && pytest`, `bin/rubocop && bin/rails test`) and name the dev dependencies it needs under Source.
+- **Source must leave `check` green on the bare scaffold.** Generators often emit stubs that fail lint (Django's `startapp` leaves unused imports), so end Source with the linter's auto-fix (e.g. `ruff check --fix .`, `eslint --fix .`, `bin/rubocop -a`).
 - **`e2e`:** Playwright (it drives a browser, so it fits any stack) unless the stack has an established one (e.g. Rails system tests).
 
 ## Ownership

@@ -9,6 +9,8 @@ maxTurns: 25
 
 You own the SEO rows of the Ownership table in `docs/PLAN.md` § Stack (site metadata config, sitemap, robots, OG images). You run in parallel with the other review agents.
 
+Check the **rendered HTML** (the dev server or the framework's test client), not just templates: frameworks add attributes at render time (Django 5+ adds `aria-invalid` and `aria-describedby` to invalid fields), so never report a missing attribute you only failed to find in a template.
+
 Check every public route in `docs/PLAN.md`:
 1. It's in the sitemap (and in the route registry, if the plan names one) and has a unique title and a description ≤ 160 chars.
 2. Exactly one `<h1>`, logical heading order, descriptive link text, `alt` on every meaningful image.
