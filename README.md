@@ -1,6 +1,6 @@
 # webteam
 
-**A supervised team of Claude Code subagents that builds a website across all 11 layers of web development, in parallel where the work allows it, and in order where it doesn't.**
+**A supervised team of Claude Code subagents that builds a website on any web stack (Next.js, Astro, SvelteKit, Django, Rails, Laravel, …) across all 11 layers of web development, in parallel where the work allows it, and in order where it doesn't.**
 
 Every website, built properly, touches the same 11 layers:
 
@@ -11,7 +11,7 @@ Every website, built properly, touches the same 11 layers:
 | 3 | Frontend | `web-frontend` |
 | 4 | Backend | `web-backend` |
 | 5 | Database | `web-backend` (whoever writes the API writes the schema) |
-| 6 | Hosting & deployment | [web-starter](https://github.com/itej13/web-starter) template + `web-ship` |
+| 6 | Hosting & deployment | `web-ship` (+ [web-starter](https://github.com/itej13/web-starter) for Next.js) |
 | 7 | Security | `web-security` |
 | 8 | Performance | `web-performance` |
 | 9 | SEO (+ accessibility basics) | template + `web-seo` |
@@ -34,8 +34,8 @@ The obvious design, every layer agent running simultaneously, fails in practice:
 So `webteam`:
 
 1. **Runs dependency-ordered waves.** Agents run in parallel only inside a wave, where their inputs already exist.
-2. **Gives every file area exactly one owner** (the table lives in the project's `CLAUDE.md`), so parallel agents never collide.
-3. **Gates every wave on facts.** The wave passes only if `npm run check` (lint + typecheck + unit tests + build) and, later, Playwright e2e pass, and the diff stays inside each agent's owned files. Then it commits.
+2. **Gives every file area exactly one owner** (the table lives in `docs/PLAN.md` § Stack, mapped to your framework's real paths), so parallel agents never collide.
+3. **Gates every wave on facts.** The wave passes only if the plan's `check` command (lint + typecheck + unit tests + build) and, later, Playwright e2e pass, and the diff stays inside each agent's owned files. Then it commits.
 4. **Refuses to run on small sites.** For ≤ 3 pages with no backend, it tells you to build solo, because the team isn't worth the tokens.
 
 ```
@@ -43,24 +43,24 @@ brief ──▶ 1 Plan ──▶ [you approve] ──▶ 2 Design ∥ Backend �
                                                                    │
            6 Ship ◀── 5 Fix (owners, parallel) ◀── 4 Security ∥ Performance ∥ SEO ∥ Tests
                  │
-          each arrow = gate: npm run check · ownership diff · STATUS.md · git commit
+          each arrow = gate: check command · ownership diff · STATUS.md · git commit
 ```
 
 ---
 
 ## The team
 
-| Agent | Owns | Model · effort · max turns | Preloaded skill | Loads on demand (only when the trigger applies) |
-|---|---|---|---|---|
-| `web-planner` | `docs/PLAN.md` | inherit · high · 15 | none | `engineering:system-design`, `engineering:architecture`, `vercel:ai-sdk` |
-| `web-designer` | `app/globals.css`, `components/ui/**` | inherit · medium · 40 | none: built-in **design brief** | `ui-ux-pro-max`, `landing-page`, `pick-ui-library`, `vercel:shadcn`, `impeccable`, `frontend-design:frontend-design`, `design-taste-frontend` (high-end only) |
-| `web-frontend` | pages, layouts, feature components, `lib/content/**`; may only append to `site.routes` | sonnet · medium · 80 | `vercel:nextjs` + built-in **motion brief** | `vercel:next-cache-components`, `vercel:react-best-practices`, `vercel:shadcn`, `vercel:ai-sdk`, `emil-design-eng`, `apple-design` |
-| `web-backend` | `app/api/**`, `lib/server/**`, `db/**`, `proxy.ts`, `next.config.ts`, server actions, and their unit tests | inherit · high · 80 | none | `vercel:marketplace`, `vercel:vercel-storage`, `vercel:auth`, `vercel:vercel-functions`, `vercel:ai-sdk`, `vercel:ai-gateway`, `vercel:workflow`, `vercel:queues`, `data:sql-queries` |
-| `web-security` | review only (≤ 10-line fixes); also usable standalone on any repo | inherit · medium · 40 | none | `graphify` code-only graph for repos with more than ~80 files (attack-surface triage; leads, not findings), `security-review`, `vercel:vercel-firewall` |
-| `web-performance` | review only (≤ 10-line fixes) | sonnet · low · 25 | none | `vercel:next-cache-components`, `vercel:cdn-caching`, `vercel:react-best-practices` |
-| `web-seo` | `lib/site.ts`, sitemap, robots, OG images | haiku · low · 25 | none | `design:accessibility-review` |
-| `web-tester` | `e2e/**`, plus unit tests where an owner left none | sonnet · medium · 50 | none | `anthropic-skills:webapp-testing`, `engineering:testing-strategy` |
-| `web-ship` | `.github/**`, `instrumentation.ts`, `vercel.ts`, `.env.example` | haiku · low · 30 | none | `vercel:deploy`, `vercel:vercel-cli`, `vercel:env-vars`, `vercel:deployments-cicd`, `vercel:verification`, `engineering:deploy-checklist` |
+| Agent | Owns (mapped to your stack's paths by the planner) | Model · effort · max turns | Loads on demand (only when the trigger applies) |
+|---|---|---|---|
+| `web-planner` | `docs/PLAN.md`, incl. the **Stack** section: framework, commands, ownership, deploy target | inherit · high · 15 | `engineering:system-design`, `engineering:architecture`, `vercel:ai-sdk` |
+| `web-designer` | global stylesheet / tokens, base UI primitives; built-in **design brief** | inherit · medium · 40 | `ui-ux-pro-max`, `landing-page`, `pick-ui-library`, `vercel:shadcn`, `impeccable`, `frontend-design:frontend-design`, `design-taste-frontend` (high-end only) |
+| `web-frontend` | pages/views, layouts, feature components, static content; may only append to a route registry; built-in **motion brief** | sonnet · medium · 80 | `vercel:nextjs` (Next.js only), `vercel:next-cache-components`, `vercel:react-best-practices`, `vercel:shadcn`, `vercel:ai-sdk`, `emil-design-eng`, `apple-design` |
+| `web-backend` | API routes/controllers, server logic, schema + migrations, auth/middleware, server config, and their unit tests | inherit · high · 80 | `vercel:*` storage/auth/functions/workflow skills (Vercel only), `vercel:ai-sdk` or `claude-api`, `data:sql-queries` |
+| `web-security` | review only (≤ 10-line fixes); also usable standalone on any repo | inherit · medium · 40 | `graphify` code-only graph for repos with more than ~80 files (attack-surface triage; leads, not findings), `security-review`, `vercel:vercel-firewall` |
+| `web-performance` | review only (≤ 10-line fixes) | sonnet · low · 25 | `vercel:next-cache-components`, `vercel:cdn-caching`, `vercel:react-best-practices` |
+| `web-seo` | site metadata config, sitemap, robots, OG images | haiku · low · 25 | `design:accessibility-review` |
+| `web-tester` | e2e tests + config, plus unit tests where an owner left none | sonnet · medium · 50 | `anthropic-skills:webapp-testing`, `engineering:testing-strategy` |
+| `web-ship` | CI, monitoring, deploy config, `.env.example` | haiku · low · 30 | `vercel:deploy`, `vercel:vercel-cli`, `vercel:env-vars`, `vercel:deployments-cicd`, `vercel:verification` (Vercel only), `engineering:deploy-checklist` |
 
 Every skill is **optional**: agents skip any that aren't installed. Where they come from:
 
@@ -81,7 +81,7 @@ Every skill is **optional**: agents skip any that aren't installed. Where they c
 | **Size gate** | Small sites don't start the team at all. |
 | **Model per agent** | Mechanical work (SEO, deploy) runs on Haiku; routine build and review work runs on Sonnet; only planning, design, backend and security use your main model. |
 | **`effort` + `maxTurns` per agent** | Caps reasoning depth and stops runaway loops. |
-| **One preloaded skill at most** | Preloaded skills are injected in full at startup. Everything else is a *skill map* in the agent's prompt: load X only when trigger Y applies. Large skills (e.g. a 17k-token design skill) are explicitly gated. |
+| **No preloaded skills** | Preloaded skills are injected in full at startup, even when the stack doesn't need them. Everything is a *skill map* in the agent's prompt: load X only when trigger Y applies. Large skills (e.g. a 17k-token design skill) are explicitly gated. |
 | **Distilled briefs, not merged skills** | The designer and frontend agents carry a ~700-word design brief and a ~200-word motion brief, distilled from eight overlapping design and motion skills (~28k words). Routine sites need no skill loads at all; the originals stay available for depth. Merging the skills into one always-loaded file would have cost ~38k tokens per run and dropped their scripts and data. |
 | **Explicit `tools:` lists** | Agents don't inherit your MCP connectors or the Agent tool, so their context carries no tool schemas they don't need and they can't fan out. |
 | **Files as the shared memory** | The plan, contract and status live in `docs/`. Prompts say "read docs/PLAN.md" instead of pasting it. |
@@ -110,7 +110,7 @@ mkdir -p ~/.claude/skills && cp -R webteam/skills/webteam ~/.claude/skills/
 
 ## Use
 
-In an empty folder (or one created from [web-starter](https://github.com/itej13/web-starter)):
+In an empty folder or an existing repo, any stack:
 
 ```
 /webteam A booking site for a yoga studio: class schedule, sign-up, member dashboard, admin page to add classes.
@@ -118,17 +118,18 @@ In an empty folder (or one created from [web-starter](https://github.com/itej13/
 
 The supervisor will:
 
-1. Copy the template if the folder is empty (`npx degit itej13/web-starter`).
-2. Run the planner and show you the plan, its assumptions, and which layers it decided to skip. **You approve before anything is built.**
-3. Run the waves, committing after each passing gate and keeping `docs/STATUS.md` up to date with evidence per layer.
-4. Collect everything that needs your consent (creating DB/auth accounts, production deploys, pushing to GitHub, real secrets) and ask once.
-5. Finish with the STATUS table, the preview URL, and any open findings.
+1. Run the planner. In an existing repo it detects the stack; in an empty folder it uses the stack you name, or Next.js from web-starter by default.
+2. Show you the plan: the stack, its `check`/`e2e` commands, the file-ownership table, the assumptions, and which layers it skips. **You approve before anything is built.**
+3. Scaffold an empty folder (web-starter, or the framework's official CLI) and confirm `check` is green on the bare baseline.
+4. Run the waves, committing after each passing gate and keeping `docs/STATUS.md` up to date with evidence per layer.
+5. Collect everything that needs your consent (creating DB/auth accounts, production deploys, pushing to GitHub, real secrets) and ask once.
+6. Finish with the STATUS table, the preview URL, and any open findings.
 
 ## Requirements
 
 - Claude Code with subagent support.
-- The [web-starter](https://github.com/itej13/web-starter) layout. Agents assume Next.js App Router, `npm run check`, `docs/PLAN.md` and the ownership table in `CLAUDE.md`. Other stacks need the ownership table and commands edited.
-- Node 22+; a Vercel account for preview deploys (optional).
+- Any web stack whose lint, tests and build run from the command line. Next.js + [web-starter](https://github.com/itej13/web-starter) is the best-supported path: CI, analytics, sitemap and tests come prewired. On other stacks the agents add those themselves, which costs more tokens.
+- Your stack's toolchain, plus Node 22+ for Playwright e2e. A logged-in deploy CLI (Vercel, Netlify, Fly, …) for preview deploys (optional).
 
 ## First trial run
 
@@ -146,7 +147,7 @@ A 3-page bakery site with a contact API (validation, honeypot, logging), local o
 
 - Agents don't share live memory, only files. A vague API contract in `docs/PLAN.md` is the most common source of bugs, so the planner is told to be exact.
 - The supervisor retries a failed wave once, then hands the problem to you instead of looping.
-- It's tuned for Next.js on Vercel. The ideas (waves, ownership, factual gates) transfer; the commands don't.
+- Stack knowledge lives in the plan, not in per-stack templates: the planner writes the commands and ownership paths, and you confirm them at the human gate. If a stack keeps getting them wrong, that's the case for adding a template for it.
 
 ## License
 

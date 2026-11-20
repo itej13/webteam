@@ -5,7 +5,7 @@
     {
       "name": "webteam",
       "source": "./",
-      "description": "Supervised multi-agent website builder: 9 layer agents + the /webteam orchestrator skill."
+      "description": "Supervised multi-agent website builder for any web stack: 9 layer agents + the /webteam orchestrator skill."
     }
   ]
 }
