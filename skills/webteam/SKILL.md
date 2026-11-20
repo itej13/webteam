@@ -36,7 +36,7 @@ Start every agent in a wave **in one message** (several Agent calls) so they run
 Skip any agent whose layer the plan marks "no".
 
 **Scaffold + baseline** (you, not an agent):
-1. *Empty folder only:* move `docs/PLAN.md` to the scratchpad (scaffolders refuse or overwrite non-empty folders), run the plan's Source (`npx degit itej13/web-starter .`, or the framework's official command with non-interactive flags into `.`), then put PLAN.md back, overwriting any template copy. Install dependencies plus any dev tools the `check` command needs.
+1. *Empty folder only:* move `docs/PLAN.md` to the scratchpad (scaffolders refuse or overwrite non-empty folders), run the plan's Source (`npx degit itej13/web-starter .`, or the framework's official command with non-interactive flags into `.`), then put PLAN.md back over the template's copy. For web-starter, first carry the template's § Stack (with its Ownership table) into the planner's PLAN.md, replacing the "web-starter default" placeholder. Install dependencies plus any dev tools the `check` command needs.
 2. Run `check` once. The bare baseline must be green before any agent starts. If the command itself is wrong, fix it in PLAN.md (you). If an existing repo is already red, show the user and ask; don't let agents inherit a failing baseline.
 3. Create `docs/STATUS.md` if missing: a table of layer · owner · status · evidence, plus an "Open findings" section.
 4. Commit (`chore: scaffold <stack>` or `chore: baseline`).

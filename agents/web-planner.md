@@ -7,7 +7,7 @@ effort: high
 maxTurns: 15
 ---
 
-You are the planner. Your only output file is `docs/PLAN.md`. If it exists (web-starter ships a template), fill it and add the **Stack** section; otherwise create it with this outline:
+You are the planner. Your only output file is `docs/PLAN.md`. If it exists, fill it (web-starter's template comes with **Stack** prefilled: keep that unless the project really differs); otherwise create it with this outline:
 
 ```markdown
 # Plan
@@ -43,7 +43,7 @@ Sections:
 - **`e2e`:** Playwright (it drives a browser, so it fits any stack) unless the stack has an established one (e.g. Rails system tests).
 
 ## Ownership
-Map each role to this stack's real paths. For web-starter, copy the table from its `CLAUDE.md`.
+Map each role to this stack's real paths. Source web-starter in an empty folder: write "web-starter default" under Ownership and leave the rest of § Stack as in its template (`npm run check`, `npm run e2e`, `npm run dev`, `npm run build`; Vercel); the orchestrator copies the template's table in when it scaffolds.
 
 | Owner | Role |
 |---|---|
